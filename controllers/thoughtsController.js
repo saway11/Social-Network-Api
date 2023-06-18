@@ -23,3 +23,23 @@ const getThoughtById = async (req, res) => {
         res.status(400).json(err)
     }
 }
+
+// create a thought
+const createThought = async (req, res) => {
+    try {
+        const thoughtData = await Thought.create(res.body);
+        const userData = await User.findOneAndUpdate(
+            { _id: req.body.uderId },
+            { $push: { thoughts: thoughtData._id } },
+            { new: true }
+        );
+        if (!userData) {
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
+        }
+        res.status(200).json(thoughtData);
+    } catch (err) {
+        console.log(err);
+        res.status(400).json(err);
+    }
+}
