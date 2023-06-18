@@ -119,3 +119,13 @@ const deleteReaction = async (req, res) => {
         res.status(400).json(err);
     }
 }
+
+module.exports = {
+    getAllThoughts,
+    getThoughtById,
+    createThought,
+    updateThoughtById,
+    deleteThoughtById,
+    addReaction,
+    deleteReaction,
+};
