@@ -83,3 +83,21 @@ const deleteThoughtById = async (req, res) => {
         res.status(400).json(err);
     }
 }
+
+// add reaction to thought
+const addReaction = async (req, res) => {
+    try {
+        const thoughtData = await Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $push: { reactions: req.body } },
+            { new: true }
+        );
+        if (!thoughtData) {
+            res.status(404).json({ message: 'No thought found with this id!' });
+            return;
+        }
+        res.status(200).json(thoughtData);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+}
