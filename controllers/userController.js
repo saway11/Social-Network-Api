@@ -14,3 +14,17 @@ const getAllUsers = async (req, res) => {
 };
 
 // get user by id
+const getUserById = async (req, res) => {
+    try {
+        const userData = await User.findByid(req.params.id).populate('thoughts').populate('friends');
+        if (!userData) {
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
+        }
+        res.status(200).json(userData);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+};
+
+// create a user
