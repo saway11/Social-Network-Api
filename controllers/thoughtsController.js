@@ -60,3 +60,26 @@ const updateThoughtById = async (req, res) => {
         res.status(400).json(err);
     }
 }
+
+// delete thought by id
+const deleteThoughtById = async (req, res) => {
+    try {
+        const thoughtData = await Thought.findOneandDelete({ _id: req.params.id });
+        if (!thoughtData) {
+            res.status(404).json({ message: 'No thought found with this id!' });
+            return;
+        }
+        const userData = await User.findOneAndUpdate(
+            { username: thoughtData.username },
+            { $pull: { thoughts: thoughtData._id } },
+            { new: true }
+        );
+        if (!userData) {
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
+        }
+        res.status(200).json({ message: 'Thought deleted!' });
+    } catch (err) {
+        res.status(400).json(err);
+    }
+}
