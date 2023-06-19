@@ -38,3 +38,21 @@ const createUser = async (req, res) => {
 };
 
 // update user by id
+const updateUserById = async (req, res) => {
+    try {
+        const user = await User.findOneAndUpdate(
+            { _id: req.params.id },
+            req.body,
+            { new: true }
+        );
+        if (!user) {
+            res.status(404).json({ message: 'No user found with this id!' });
+            return; 
+        }
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(400).json(err);
+    }
+};
+
+// delete user by id
