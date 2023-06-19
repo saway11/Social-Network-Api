@@ -90,3 +90,29 @@ const addFriend = async (req, res) => {
 }
 
 // delete a friend
+const deleteFriend = async (req, res) => {
+    try {
+        const user = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $pull: { friends: req.params } },
+            { new: true }
+        );
+        if (!user) {
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
+        }
+        res.status(200).json({ message: 'Friend is deleted!' });
+    } catch (err) {
+        res.status(400).json(err);
+    }   
+}
+
+module.expors = {
+    getAllUsers,
+    getUserById,
+    createUser,
+    updateUserById,
+    deleteUserById,
+    addFriend,
+    deleteFriend
+};
